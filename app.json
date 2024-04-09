@@ -1,30 +1,37 @@
 {
   "expo": {
-    "name": "designItNative",
-    "slug": "designItNative",
-    "version": "1.0.0",
+    "name": "Palette IT",
+    "slug": "paletteIt",
+    "version": "1.1.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo_app.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo_app.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5E17EB"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.matteohcf.paletteIt"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/logo_app.png",
+        "backgroundColor": "#5E17EB"
+      },
+      "package": "com.matteohcf.paletteIt"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1b2cfc5c-2bdd-4ba5-9cef-1afaad598466"
+      }
     }
   }
 }

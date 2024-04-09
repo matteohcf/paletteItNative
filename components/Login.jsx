@@ -31,10 +31,15 @@ const Login = () => {
   const [displayUsername, setDisplayUsername] = useState("");
   const [displayIdUtente, setDisplayIdUtente] = useState("");
   const [cards, setCards] = useState([]);
+  const [showPassword, setShowPassword] = useState(false); //show password
 
   /* Variabile redux store */
   const isNewPalette = useSelector((state) => state.NewPalette.value);
   const dispatch = useDispatch();
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -228,13 +233,23 @@ const Login = () => {
               <Input
                 label="Password"
                 placeholder="Inserisci password"
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 leftIcon={
                   <MaterialCommunityIcons
                     name="lock-alert-outline"
                     color={"rgb(104, 48, 237)"}
                     size={22}
                   />
+                }
+                rightIcon={
+                  // Icona show password
+                  <TouchableOpacity onPress={handleShowPassword}>
+                    <MaterialCommunityIcons
+                      name={showPassword ? "eye-off-outline" : "eye-outline"}
+                      color={"rgb(104, 48, 237)"}
+                      size={22}
+                    />
+                  </TouchableOpacity>
                 }
                 value={password}
                 onChangeText={setPassword}

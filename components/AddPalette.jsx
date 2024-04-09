@@ -63,10 +63,6 @@ const AddPalette = () => {
   };
   getStoredValue();
 
-  /* useEffect(() => {
-    console.log(isNewPalette);
-  }, [isNewPalette]); */
-
   /* Creazione palette in DB */
   const creaPalette = () => {
     axios

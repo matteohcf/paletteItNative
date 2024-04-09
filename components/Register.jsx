@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Input, Button } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -7,10 +7,15 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 const Register = () => {
   const navigation = useNavigation(); // Funzione di navigazione
+  const [showPassword, setShowPassword] = useState(false); //show password
 
   // Funzione per tornare alla schermata precedente
   const goBack = () => {
     navigation.goBack();
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const [email, setEmail] = useState("");
@@ -79,13 +84,23 @@ const Register = () => {
           <Input
             label="Password"
             placeholder="Inserisci password"
-            secureTextEntry
+            secureTextEntry={!showPassword}
             leftIcon={
               <MaterialCommunityIcons
                 name="lock-alert-outline"
                 color={"rgb(104, 48, 237)"}
                 size={22}
               />
+            }
+            rightIcon={
+              // Icona show password
+              <TouchableOpacity onPress={handleShowPassword}>
+                <MaterialCommunityIcons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  color={"rgb(104, 48, 237)"}
+                  size={22}
+                />
+              </TouchableOpacity>
             }
             value={password}
             onChangeText={setPassword}

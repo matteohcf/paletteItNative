@@ -37,6 +37,26 @@ const Login = () => {
   const isNewPalette = useSelector((state) => state.NewPalette.value);
   const dispatch = useDispatch();
 
+  // Effetto per recuperare i dati salvati in AsyncStorage
+  useEffect(() => {
+    const fetchInfo = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("email");
+        const storedUsername = await AsyncStorage.getItem("username");
+        const storedIdUtente = await AsyncStorage.getItem("id_utente");
+        if (storedEmail && storedUsername && storedIdUtente) {
+          setDisplayEmail(storedEmail);
+          setDisplayUsername(storedUsername);
+          setDisplayIdUtente(storedIdUtente);
+          login();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchInfo();
+  }, [login]);
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -57,7 +77,7 @@ const Login = () => {
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("email", response.data.data.email); // Salva l'email
         await AsyncStorage.setItem("username", response.data.data.username); // Salva username
-        await AsyncStorage.setItem("id_utente", response.data.data.id_utente); // Salva username
+        await AsyncStorage.setItem("id_utente", String(response.data.data.id_utente)); // Salva username
         setDisplayEmail(response.data.data.email); // Imposta l'email per la visualizzazione
         setDisplayUsername(response.data.data.username); // Imposta username per la visualizzazione
         setDisplayIdUtente(response.data.data.id_utente);
@@ -80,13 +100,7 @@ const Login = () => {
       /* console.log(displayIdUtente); */
       if (isLoggedIn) {
         setLoading(true);
-        axios
-          .post(
-            "https://matteocarrara.it/api/paletteAPI/getPaletteDashboard.php",
-            {
-              creating_user_id: displayIdUtente,
-            }
-          )
+        axios.get(`https://matteocarrara.it/api/paletteAPI/getPaletteDashboard.php?creating_user_id=${displayIdUtente}`)
           .then((response) => {
             setCards([]); /* Account nuovo --> SetCards */
             if (Array.isArray(response.data)) {
@@ -112,11 +126,9 @@ const Login = () => {
   /* Eliminazione palette */
   const handleDeletePalette = async (id_palette) => {
     /* console.log("Elimino palette: ", id_palette); */
-    if (id_palette) {
+    if (id_palette && displayIdUtente) {
       try {
-        await axios.delete(
-          `https://matteocarrara.it/api/paletteAPI/deletePalette.php?id=${id_palette}`
-        );
+        await axios.delete(`https://matteocarrara.it/api/paletteAPI/deletePalette.php?paletteId=${id_palette}&userId=${displayIdUtente}`);
         setCards(cards.filter((palette) => palette.id_palette !== id_palette));
         /* console.log("Palette eliminata con successo."); */
       } catch (error) {
@@ -124,26 +136,6 @@ const Login = () => {
       }
     }
   };
-
-  // Effetto per recuperare i dati salvati in AsyncStorage
-  useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        const storedEmail = await AsyncStorage.getItem("email");
-        const storedUsername = await AsyncStorage.getItem("username");
-        const storedIdUtente = await AsyncStorage.getItem("id_utente");
-        if (storedEmail && storedUsername && storedIdUtente) {
-          setDisplayEmail(storedEmail);
-          setDisplayUsername(storedUsername);
-          setDisplayIdUtente(storedIdUtente);
-          login();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchInfo();
-  }, [login]);
 
   const handleRegister = () => {
     /* Link alla pagina register */
